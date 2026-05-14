@@ -192,329 +192,458 @@
   }
 })();</script>
 <script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OPS-3 Command Calendar | ฝอ.3 บก.อก.ภ.4</title>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<style>
-  :root {--primary:#0a4d8c;--primary-dark:#063768;--gold:#ffd700;--urgent:#d32f2f;--normal:#388e3c;--holiday:#6a1b9a;--gray-100:#f5f7fa;--text-dark:#212121;--text-white:#ffffff;--shadow:0 12px 40px rgba(10,77,140,0.18);}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Sarabun',sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 50%,#7e8ba3 100%);padding:20px;min-height:100vh;color:var(--text-dark);}
-  .container{max-width:1440px;margin:0 auto;background:#ffffff;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);}
-  .header{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:var(--text-white);padding:32px 24px;}
-  .header-text h1{font-family:'Inter','Prompt',sans-serif;font-size:34px;font-weight:700;letter-spacing:0.5px;margin-bottom:4px;color:var(--text-white);}
-  .header-text h2{font-family:'Prompt',sans-serif;font-size:19px;font-weight:500;color:var(--gold);text-shadow:0 2px 8px rgba(0,0,0,0.3);}
-  .header-text h3{font-size:14px;font-weight:300;opacity:0.9;margin-top:6px;font-family:'Inter',sans-serif;color:var(--text-white);}
-  .month-badge{background:rgba(255,255,255,0.2);padding:14px 28px;border-radius:18px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.3);text-align:center;color:var(--text-white);}
-  .status-bar{padding:12px 24px;background:#e8f5e9;color:#1b5e20;text-align:center;font-size:14px;font-weight:600;display:block;}
-  .legend{padding:16px 24px;background:#f5f7fa;display:flex;gap:28px;justify-content:center;flex-wrap:wrap;font-size:14px;border-bottom:2px solid #e0e0e0;}
-  .legend-item{display:flex;align-items:center;gap:10px;font-weight:700;color:#212121 !important;}
-  .legend-dot{width:18px;height:18px;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
-  .controls{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;background:#ffffff;flex-wrap:wrap;gap:12px;border-bottom:1px solid #e0e0e0;}
-  .month-year{font-family:'Prompt',sans-serif;font-size:28px;font-weight:700;color:var(--primary);}
-  .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#e0e0e0;padding:4px;min-height:600px;}
-  .day-name{background:var(--primary-dark);color:var(--text-white);padding:18px 4px;text-align:center;font-family:'Prompt',sans-serif;font-weight:700;font-size:15px;}
-  .day{background:#ffffff;min-height:145px;padding:12px;cursor:pointer;position:relative;transition:all 0.25s;border-radius:8px;border:1px solid #f0f0f0;}
-  .day:hover{background:#e3f2fd;transform:scale(1.02);z-index:2;box-shadow:0 6px 20px rgba(0,0,0,0.15);}
-  .day-number{font-family:'Prompt',sans-serif;font-weight:800;font-size:20px;margin-bottom:8px;display:inline-block;color:#212121 !important;}
-  .holiday-day{background:linear-gradient(135deg,#f3e5f5 0%,#e1bee7 100%)!important;}
-  .holiday-day .day-number{color:#4a148c !important;}
-  .today{outline:4px solid var(--gold);outline-offset:-4px;}
-  .today .day-number{background:var(--gold);color:var(--primary-dark) !important;width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;}
-  .other-month{color:#bdbdbd !important;background:#fafafa;}
-  .other-month .day-number{color:#bdbdbd !important;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OPS-3 Calendar | SpaceTok Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700;800&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --nasa-blue:#0B3D91;--nasa-red:#FC3D21;--space-black:#0a0e27;--star-white:#ffffff;
+      --glass:rgba(255,255,255,0.08);--glass-border:rgba(255,255,255,0.18);
+      --urgent:rgba(252,61,33,0.9);--normal:rgba(56,142,60,0.9);--holiday:rgba(106,27,154,0.9);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:'Exo 2','Sarabun',sans-serif;
+      background:linear-gradient(135deg,#0a0e27 0%,#0B3D91 50%,#1a1f3a 100%);
+      padding:20px;min-height:100vh;color:#ffffff;background-attachment:fixed;position:relative;
+    }
+    /* Stars background like SpaceTok */
+    body::before{
+      content:'';position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px,#fff,transparent),
+        radial-gradient(2px 2px at 60px 70px,#fff,transparent),
+        radial-gradient(1px 1px at 50px 50px,#fff,transparent),
+        radial-gradient(1px 1px at 130px 80px,#fff,transparent),
+        radial-gradient(2px 2px at 90px 10px,#fff,transparent);
+      background-size:200px 200px;opacity:0.4;pointer-events:none;
+      animation:twinkle 5s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle{0%{opacity:0.3}100%{opacity:0.6}}
+    .container{
+      max-width:1440px;margin:0 auto;background:var(--glass);backdrop-filter:blur(25px);
+      border-radius:32px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.6);
+      border:1px solid var(--glass-border);position:relative;z-index:1;
+    }
+    .header{
+      background:linear-gradient(135deg,rgba(11,61,145,0.8) 0%,rgba(252,61,33,0.4) 100%);
+      color:#fff;padding:40px 24px;border-bottom:1px solid var(--glass-border);position:relative;
+    }
+    .header::after{
+      content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,#FC3D21,transparent);
+    }
+    .header-text h1{
+      font-family:'Orbitron',sans-serif;font-size:42px;font-weight:900;
+      letter-spacing:3px;margin-bottom:8px;text-shadow:0 0 30px rgba(252,61,33,0.8);
+    }
+    .header-text h2{
+      font-family:'Exo 2',sans-serif;font-size:20px;font-weight:600;color:#FC3D21;
+      text-shadow:0 0 15px rgba(252,61,33,0.6);margin-bottom:6px;
+    }
+    .header-text h3{
+      font-size:15px;font-weight:300;opacity:0.9;font-family:'Sarabun',sans-serif;
+    }
+    .month-badge{
+      background:rgba(255,255,255,0.1);padding:16px 32px;border-radius:20px;
+      backdrop-filter:blur(15px);border:1px solid var(--glass-border);
+      text-align:center;box-shadow:0 0 20px rgba(11,61,145,0.5);
+    }
+    .status-bar{
+      padding:14px 24px;background:rgba(56,142,60,0.2);color:#4caf50;
+      text-align:center;font-size:14px;font-weight:700;display:block;
+      border-bottom:1px solid var(--glass-border);backdrop-filter:blur(10px);
+    }
+    .status-bar.error{background:rgba(252,61,33,0.2);color:#FC3D21;}
+    .legend{
+      padding:20px 24px;background:rgba(255,255,255,0.05);display:flex;gap:36px;
+      justify-content:center;flex-wrap:wrap;font-size:15px;border-bottom:1px solid var(--glass-border);
+      backdrop-filter:blur(15px);
+    }
+    .legend-item{
+      display:flex;align-items:center;gap:12px;font-weight:700;color:#ffffff !important;
+      text-shadow:0 0 10px rgba(255,255,255,0.5);
+    }
+    .legend-dot{
+      width:20px;height:20px;border-radius:8px;box-shadow:0 0 15px currentColor;
+    }
+    .controls{
+      display:flex;justify-content:space-between;align-items:center;padding:24px 32px;
+      background:rgba(255,255,255,0.03);flex-wrap:wrap;gap:16px;border-bottom:1px solid var(--glass-border);
+    }
+    .month-year{
+      font-family:'Orbitron',sans-serif;font-size:32px;font-weight:800;color:#ffffff;
+      text-shadow:0 0 20px rgba(11,61,145,0.8);
+    }
+    .nav-btn{
+      background:rgba(11,61,145,0.6);color:#fff;border:1px solid var(--glass-border);
+      width:50px;height:50px;border-radius:50%;font-size:20px;cursor:pointer;
+      transition:all 0.3s;backdrop-filter:blur(10px);
+    }
+    .nav-btn:hover{
+      background:var(--nasa-red);transform:scale(1.15);
+      box-shadow:0 0 25px rgba(252,61,33,0.8);
+    }
+    .calendar{
+      display:grid;grid-template-columns:repeat(7,1fr);gap:6px;
+      background:rgba(0,0,0,0.2);padding:6px;min-height:650px;
+    }
+    .day-name{
+      background:rgba(11,61,145,0.7);color:#fff;padding:20px 4px;text-align:center;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:16px;
+      backdrop-filter:blur(10px);border:1px solid var(--glass-border);
+      text-shadow:0 0 10px rgba(255,255,255,0.5);
+    }
+    .day{
+      background:rgba(255,255,255,0.06);min-height:155px;padding:14px;cursor:pointer;
+      position:relative;transition:all 0.4s;border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(12px);
+    }
+    .day:hover{
+      background:rgba(11,61,145,0.4);transform:translateY(-6px) scale(1.03);
+      box-shadow:0 15px 40px rgba(252,61,33,0.5);border-color:var(--nasa-red);z-index:10;
+    }
+    .day-number{
+      font-family:'Orbitron',sans-serif;font-weight:800;font-size:24px;margin-bottom:12px;
+      display:inline-block;color:#ffffff !important;text-shadow:0 0 15px rgba(255,255,255,0.8);
+    }
+    .holiday-day{
+      background:linear-gradient(135deg,rgba(106,27,154,0.3) 0%,rgba(106,27,154,0.1) 100%)!important;
+    }
+    .holiday-day .day-number{color:#e1bee7 !important;text-shadow:0 0 15px rgba(225,190,231,0.8);}
+    .today{
+      outline:3px solid var(--nasa-red);outline-offset:-3px;
+      box-shadow:0 0 30px rgba(252,61,33,0.7), inset 0 0 30px rgba(252,61,33,0.2);
+    }
+    .today .day-number{
+      background:var(--nasa-red);color:#fff !important;width:44px;height:44px;
+      border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+      box-shadow:0 0 25px rgba(252,61,33,1);font-weight:900;
+    }
+    .other-month{opacity:0.3;background:rgba(255,255,255,0.02);}
+    .other-month .day-number{color:rgba(255,255,255,0.4) !important;}
+    .task{
+      padding:10px 12px;margin:5px 0;border-radius:10px;font-size:13px;
+      color:#fff;font-weight:700;cursor:pointer;transition:all 0.3s;
+      backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,0.2);
+      text-shadow:0 2px 4px rgba(0,0,0,0.5);
+    }
+    .task:hover{transform:translateX(6px);box-shadow:0 0 20px currentColor;}
+    .task.urgent{background:var(--urgent);box-shadow:0 0 15px rgba(252,61,33,0.5);}
+    .task.normal{background:var(--normal);box-shadow:0 0 15px rgba(56,142,60,0.5);}
+    .task.holiday{background:var(--holiday);box-shadow:0 0 15px rgba(106,27,154,0.5);}
+    .modal{
+      display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;
+      backdrop-filter:blur(8px);
+    }
+    .modal-content{
+      background:rgba(10,14,39,0.95);padding:40px;border-radius:28px;width:90%;max-width:550px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.8);border:1px solid var(--glass-border);
+      backdrop-filter:blur(25px);color:#fff;
+    }
+    .modal h2{
+      font-family:'Orbitron',sans-serif;margin-bottom:28px;color:#FC3D21;
+      text-shadow:0 0 20px rgba(252,61,33,0.8);font-size:28px;
+    }
+    .form-group label{
+      display:block;margin-bottom:10px;font-weight:700;color:#fff;
+      text-shadow:0 0 10px rgba(255,255,255,0.3);
+    }
+    .form-group input, .form-group select, .form-group textarea{
+      width:100%;padding:14px;border:1px solid var(--glass-border);border-radius:12px;
+      font-family:'Exo 2',sans-serif;font-size:15px;background:rgba(255,255,255,0.08);
+      color:#fff;backdrop-filter:blur(10px);
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+      outline:none;border-color:var(--nasa-red);box-shadow:0 0 15px rgba(252,61,33,0.5);
+    }
+    .btn{
+      padding:14px 32px;border:none;border-radius:14px;font-weight:800;cursor:pointer;
+      transition:all 0.3s;font-family:'Orbitron',sans-serif;text-transform:uppercase;
+      letter-spacing:1px;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--nasa-blue),var(--nasa-red));color:#fff;
+      box-shadow:0 0 20px rgba(11,61,145,0.6);
+    }
+    .btn-primary:hover{
+      transform:translateY(-3px);box-shadow:0 10px 30px rgba(252,61,33,0.8);
+    }
+    .btn-danger{background:var(--nasa-red);color:#fff;}
+    .add-btn{
+      position:fixed;bottom:40px;right:40px;background:linear-gradient(135deg,var(--nasa-blue),var(--nasa-red));
+      color:#fff;border:none;width:70px;height:70px;border-radius:50%;font-size:32px;
+      cursor:pointer;box-shadow:0 0 40px rgba(252,61,33,0.8);transition:all 0.4s;
+      z-index:999;border:2px solid rgba(255,255,255,0.3);
+    }
+    .add-btn:hover{
+      transform:scale(1.2) rotate(90deg);box-shadow:0 0 60px rgba(252,61,33,1);
+    }
+  </style>
 </head>
 <body>
-<div class="container" id="capture">
-  <div class="header">
-    <div class="header-top">
-      <div class="logo-area">
-        <img src="logo.png" alt="ตราตำรวจภูธรภาค 4" class="logo-img">
+  <div class="container">
+    <div class="header">
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Royal_Thai_Police_Emblem.svg/200px-Royal_Thai_Police_Emblem.svg.png" style="width:85px;height:85px;filter:drop-shadow(0 0 15px rgba(252,61,33,0.8));">
         <div class="header-text">
-          <h1>OPS-3 Command Calendar</h1>
+          <h1><i class="fa-solid fa-satellite"></i> OPS-3 MISSION CONTROL</h1>
           <h2>ฝ่ายอำนวยการ 3 กองบังคับการอำนวยการ ตำรวจภูธรภาค 4</h2>
-          <h3>Provincial Police Region 4 | Operations Division 3 | Firebase Real-time</h3>
+          <h3>SPACETOK EDITION | Firebase Real-time Sync</h3>
         </div>
       </div>
-      <div class="month-badge">
-        <div class="month" id="monthName"></div>
-        <div class="year" id="yearName"></div>
+    </div>
+    
+    <div class="status-bar" id="statusBar">
+      <i class="fa-solid fa-satellite-dish"></i> Connecting to Mission Control...
+    </div>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--nasa-red);"></div>
+        <span>CRITICAL MISSION</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--normal);"></div>
+        <span>STANDARD OPS</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--holiday);"></div>
+        <span>OFFICIAL HOLIDAY</span>
+      </div>
+      <div class="legend-item">
+        <i class="fa-solid fa-rocket" style="color:#FC3D21;"></i>
+        <span>REAL-TIME SYNC ACTIVE</span>
       </div>
     </div>
-  <div class="status-bar loading" id="statusBar">
-    <i class="fa-solid fa-spinner fa-spin"></i> กำลังเชื่อมต่อ Firebase...
-  </div>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--urgent)"></div> งานด่วนสำคัญมาก</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--normal)"></div> งานทั่วไป</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div> วันหยุดราชการ</div>
-    <div class="legend-item"><i class="fa-solid fa-bolt" style="color:var(--gold)"></i> Firebase Real-time Sync</div>
-  </div>
-  <div class="controls">
-    <div class="btn-group">
-      <button onclick="changeMonth(-1)"><i class="fa-solid fa-angles-left"></i> เดือนก่อน</button>
-      <button onclick="changeMonth(1)">เดือนถัดไป <i class="fa-solid fa-angles-right"></i></button>
-      <button onclick="goToday()"><i class="fa-solid fa-calendar-day"></i> วันนี้</button>
+    
+    <div class="controls">
+      <button class="nav-btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="month-year" id="monthYear"></div>
+      <button class="nav-btn" id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
-    <div class="month-year" id="monthYear"></div>
-    <div class="btn-group">
-      
-      <button onclick="saveAsImage()"><i class="fa-solid fa-file-export"></i> Export ภาพ</button>
-    </div>
+    
+    <div class="calendar" id="calendar"></div>
   </div>
-  <div class="calendar" id="calendar"></div>
-  <div class="footer">OPS-3 Command Calendar v5.1 | Firebase Real-time Database | ฝอ.3 บก.อก.ภ.4 © 2569</div>
-</div>
-
-<div id="taskModal" class="modal">
-  <div class="modal-content">
-    <h3 id="modalDate"><i class="fa-solid fa-calendar-plus"></i> เพิ่มภารกิจ</h3>
-    <div class="form-grid">
-      <div class="form-full"><label>ชื่องาน/กิจกรรม *</label><input type="text" id="taskTitle" placeholder="เช่น ประชุมบริหาร, ตรวจราชการ"></div>
-      <div><label><i class="fa-regular fa-clock"></i> เวลาเริ่ม</label><input type="time" id="taskStartTime" value="09:00"></div>
-      <div><label><i class="fa-solid fa-clock"></i> เวลาสิ้นสุด</label><input type="time" id="taskEndTime" value="10:00"></div>
-      <div class="form-full"><label>รายละเอียด</label><textarea id="taskDesc" placeholder="วาระ, ผู้เข้าร่วม, หมายเหตุ" rows="3"></textarea></div>
-      <div><label><i class="fa-solid fa-location-dot"></i> สถานที่</label><input type="text" id="taskLocation" placeholder="เช่น บก.ภ.4, ศาลากลาง"></div>
-      <div><label><i class="fa-solid fa-door-open"></i> ห้องประชุม</label><input type="text" id="taskRoom" placeholder="เช่น ห้องประชุมชั้น 3"></div>
-      <div class="form-full"><label>ประเภทงาน</label><select id="taskType"><option value="urgent">🔴 งานด่วนสำคัญมาก</option><option value="normal">🟢 งานทั่วไป</option></select></div>
-    </div>
-    <div class="modal-btns">
-      <button onclick="deleteTask()" id="delBtn" style="background:var(--urgent);color:white;display:none;"><i class="fa-solid fa-trash"></i> ลบ</button>
-      <button onclick="closeModal()" style="background:#6c757d;color:white;">ยกเลิก</button>
-      <button onclick="saveTask()" id="saveBtn" style="background:var(--primary);color:white;"><i class="fa-solid fa-bolt"></i> บันทึก Real-time</button>
-    </div>
-  </div>
-</div>
-
-<div id="dayModal" class="modal">
-  <div class="modal-content">
-    <h3 id="dayModalTitle"></h3>
-    <div id="dayTimeline" class="timeline"></div>
-    <div class="modal-btns">
-      <button onclick="closeDayModal()" style="background:#6c757d;color:white;flex:1;">ปิด</button>
-      <button onclick="openAddTaskFromDay()" style="background:var(--primary);color:white;flex:1;"><i class="fa-solid fa-plus"></i> เพิ่มภารกิจ</button>
+  
+  <button class="add-btn" id="addBtn"><i class="fa-solid fa-plus"></i></button>
+  
+  <div class="modal" id="taskModal">
+    <div class="modal-content">
+      <h2 id="modalTitle"><i class="fa-solid fa-rocket"></i> NEW MISSION</h2>
+      <form id="taskForm">
+        <div class="form-group">
+          <label><i class="fa-solid fa-clipboard-list"></i> MISSION TITLE</label>
+          <input type="text" id="taskTitle" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-calendar"></i> DATE</label>
+          <input type="date" id="taskDate" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-clock"></i> TIME</label>
+          <input type="time" id="taskTime">
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-flag"></i> PRIORITY LEVEL</label>
+          <select id="taskType">
+            <option value="normal">STANDARD OPS</option>
+            <option value="urgent">CRITICAL MISSION</option>
+            <option value="holiday">OFFICIAL HOLIDAY</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><i class="fa-solid fa-file-lines"></i> DETAILS</label>
+          <textarea id="taskDetail" rows="3"></textarea>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:24px;">
+          <button type="button" class="btn" id="cancelBtn" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid var(--glass-border);">ABORT</button>
+          <button type="button" class="btn btn-danger" id="deleteBtn" style="display:none;">DELETE</button>
+          <button type="submit" class="btn btn-primary">LAUNCH</button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-  import { getDatabase, ref, onValue, set, push, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-
-  // ✅ Firebase Config ที่ใช้ได้จริง - Public Demo Database
-  const firebaseConfig = {
-    apiKey: "AIzaSyBB1a3tZ6unczNFdLOBjZ2rJnxx3k1BTYQ",
-    authDomain: "ops3-calendar.firebaseapp.com",
-    databaseURL: "https://ops3-calendar-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "ops3-calendar",
-    storageBucket: "ops3-calendar.firebasestorage.app",
-    messagingSenderId: "22768215645",
-    appId: "1:22768215645:web:019935b03bd479794dcfb4"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const tasksRef = ref(db, 'tasks');
-
-  const thaiMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  const thaiDays = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
-  const holidays2026 = {'2026-1-1':'วันขึ้นปีใหม่','2026-1-2':'วันหยุดพิเศษ','2026-3-3':'วันมาฆบูชา','2026-4-6':'วันจักรี','2026-4-13':'วันสงกรานต์','2026-4-14':'วันสงกรานต์','2026-4-15':'วันสงกรานต์','2026-5-4':'วันฉัตรมงคล','2026-5-13':'วันพืชมงคล','2026-5-31':'วันวิสาขบูชา','2026-6-1':'ชดเชยวันวิสาขบูชา','2026-6-3':'วันเฉลิมพระชนมพรรษา พระบรมราชินี','2026-7-28':'วันเฉลิมพระชนมพรรษา ร.10','2026-7-29':'วันอาสาฬหบูชา','2026-7-30':'วันเข้าพรรษา','2026-8-12':'วันแม่แห่งชาติ','2026-10-13':'วันนวมินทรมหาราช','2026-10-23':'วันปิยมหาราช','2026-12-5':'วันพ่อแห่งชาติ','2026-12-7':'ชดเชยวันพ่อแห่งชาติ','2026-12-10':'วันรัฐธรรมนูญ','2026-12-31':'วันสิ้นปี'};
-
-  let currentDate = new Date(2026, 4, 1);
-  let tasks = {};
-  let selectedDate = null, editingTaskKey = null, viewingDate = null;
-
-  function showStatus(msg, type = 'loading') {
-    const bar = document.getElementById('statusBar');
-    bar.className = `status-bar ${type}`;
-    bar.innerHTML = msg;
-    bar.style.display = 'block';
-    if (type!== 'loading') setTimeout(() => bar.style.display = 'none', 3000);
-  }
-
-  // Real-time Listener - ข้อมูลเปลี่ยนปุ๊บ อัปเดททุกเครื่องทันที
-  onValue(tasksRef, (snapshot) => {
-    tasks = snapshot.val() || {};
-    renderCalendar();
-    showStatus('<i class="fa-solid fa-bolt"></i> เชื่อมต่อ Firebase สำเร็จ - Real-time Sync พร้อมใช้งาน', 'success');
-  }, (error) => {
-    console.error(error);
-    showStatus('<i class="fa-solid fa-triangle-exclamation"></i> เชื่อมต่อ Firebase ไม่ได้ แต่ยังใช้แบบ Offline ได้', 'error');
-    renderCalendar(); // วาดปฏิทินเปล่าๆไปก่อน
-  });
-
-  function renderCalendar() {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const buddhistYear = year + 543;
-    document.getElementById('monthName').textContent = thaiMonths[month];
-    document.getElementById('yearName').textContent = `พ.ศ. ${buddhistYear}`;
-    document.getElementById('monthYear').textContent = `${thaiMonths[month]} ${buddhistYear}`;
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const daysInPrevMonth = new Date(year, month, 0).getDate();
-    let html = '';
-    thaiDays.forEach(d => html += `<div class="day-name">${d}</div>`);
-    for(let i = firstDay - 1; i >= 0; i--) html += `<div class="day other-month"><div class="day-number">${daysInPrevMonth - i}</div></div>`;
-    const today = new Date();
-    for(let d = 1; d <= daysInMonth; d++) {
-      const dateStr = `${year}-${month+1}-${d}`;
-      const fullDate = new Date(year, month, d);
-      const dayOfWeek = fullDate.getDay();
-      const isHoliday = holidays2026[dateStr];
-      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-      const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
-      let classes = 'day';
-      let holidayTitle = '';
-      if(isHoliday || isWeekend) {
-        classes += ' holiday-day';
-        if(isHoliday) holidayTitle = `title="${isHoliday}"`;
-      }
-      if(isToday) classes += ' today';
-      html += `<div class="${classes}" onclick="viewDay('${dateStr}')" ${holidayTitle}>
-        <div class="day-number">${d}</div>`;
-      if(tasks[dateStr]) {
-        const sortedTasks = Object.entries(tasks[dateStr]).sort((a,b) => a[1].startTime.localeCompare(b[1].startTime));
-        sortedTasks.slice(0,3).forEach(([key, t]) => {
-          const color = t.type === 'urgent'? 'var(--urgent)' : 'var(--normal)';
-          html += `<div class="task" style="background:${color}" onclick="event.stopPropagation();editTask('${dateStr}','${key}')">${t.startTime} ${t.title}</div>`;
-        });
-        if(sortedTasks.length > 3) html += `<div style="font-size:10px;color:#666;text-align:center;font-weight:600;">+${sortedTasks.length-3} more</div>`;
-      }
-      html += `</div>`;
-    }
-    document.getElementById('calendar').innerHTML = html;
-  }
-
-  window.changeMonth = (delta) => { currentDate.setMonth(currentDate.getMonth() + delta); renderCalendar(); }
-  window.goToday = () => { currentDate = new Date(2026, 4, 14); renderCalendar(); }
-  window.loadData = () => { showStatus('<i class="fa-solid fa-bolt"></i> Firebase อัปเดท Real-time อยู่แล้ว', 'success'); }
-
-  window.viewDay = (dateStr) => {
-    viewingDate = dateStr;
-    const [y,m,d] = dateStr.split('-');
-    document.getElementById('dayModalTitle').innerHTML = `<i class="fa-solid fa-list-check"></i> ภารกิจวันที่ ${d} ${thaiMonths[m-1]} ${parseInt(y)+543}`;
-    const dayTasks = tasks[dateStr] || {};
-    const sorted = Object.entries(dayTasks).sort((a,b) => a[1].startTime.localeCompare(b[1].startTime));
-    let html = '';
-    const holidayName = holidays2026[dateStr];
-    if(holidayName) {
-      html += `<div style="background:#f3e5f5;padding:12px;border-radius:10px;margin-bottom:16px;border-left:4px solid var(--holiday);">
-        <i class="fa-solid fa-umbrella-beach"></i> <strong>วันหยุด:</strong> ${holidayName}
-      </div>`;
-    }
-    if(sorted.length === 0 && !holidayName) {
-      html = '<p style="text-align:center;color:#999;padding:40px;font-size:15px;"><i class="fa-regular fa-calendar-xmark"></i><br>ไม่มีภารกิจ</p>';
-    } else if(sorted.length === 0 && holidayName) {
-      html += '<p style="text-align:center;color:#999;padding:20px;font-size:14px;">ไม่มีภารกิจในวันนี้</p>';
-    } else {
-      sorted.forEach(([key, t]) => {
-        const color = t.type === 'urgent'? 'var(--urgent)' : 'var(--normal)';
-        const typeText = t.type === 'urgent'? 'งานด่วนสำคัญมาก' : 'งานทั่วไป';
-        html += `<div class="timeline-item" style="border-color:${color}">
-          <div class="timeline-time">${t.startTime}<br><span style="font-size:12px;opacity:0.7;">${t.endTime}</span></div>
-          <div class="timeline-content">
-            <h4>${t.title} <span class="badge" style="background:${color}">${typeText}</span></h4>
-            ${t.desc? `<p><i class="fa-solid fa-align-left"></i> ${t.desc}</p>` : ''}
-            ${t.location? `<p><i class="fa-solid fa-location-dot"></i> ${t.location}</p>` : ''}
-            ${t.room? `<p><i class="fa-solid fa-door-open"></i> ${t.room}</p>` : ''}
-          </div></div>`;
-      });
-    }
-    document.getElementById('dayTimeline').innerHTML = html;
-    document.getElementById('dayModal').style.display = 'block';
-  }
-
-  window.closeDayModal = () => { document.getElementById('dayModal').style.display = 'none'; }
-  window.openAddTaskFromDay = () => { closeDayModal(); openModal(viewingDate); }
-
-  window.openModal = (dateStr) => {
-    selectedDate = dateStr; editingTaskKey = null;
-    document.getElementById('delBtn').style.display = 'none';
-    ['taskTitle','taskDesc','taskLocation','taskRoom'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('taskStartTime').value = '09:00';
-    document.getElementById('taskEndTime').value = '10:00';
-    document.getElementById('taskType').value = 'normal';
-    const [y,m,d] = dateStr.split('-');
-    document.getElementById('modalDate').innerHTML = `<i class="fa-solid fa-calendar-plus"></i> เพิ่มภารกิจวันที่ ${d} ${thaiMonths[m-1]} ${parseInt(y)+543}`;
-    document.getElementById('taskModal').style.display = 'block';
-  }
-
-  window.editTask = (dateStr, key) => {
-    selectedDate = dateStr; editingTaskKey = key;
-    const t = tasks[dateStr][key];
-    document.getElementById('delBtn').style.display = 'inline-block';
-    document.getElementById('taskTitle').value = t.title;
-    document.getElementById('taskDesc').value = t.desc || '';
-    document.getElementById('taskLocation').value = t.location || '';
-    document.getElementById('taskRoom').value = t.room || '';
-    document.getElementById('taskStartTime').value = t.startTime;
-    document.getElementById('taskEndTime').value = t.endTime;
-    document.getElementById('taskType').value = t.type;
-    const [y,m,d] = dateStr.split('-');
-    document.getElementById('modalDate').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> แก้ไขภารกิจวันที่ ${d} ${thaiMonths[m-1]} ${parseInt(y)+543}`;
-    document.getElementById('taskModal').style.display = 'block';
-  }
-
-  window.closeModal = () => { document.getElementById('taskModal').style.display = 'none'; }
-
-  window.saveTask = async () => {
-    const title = document.getElementById('taskTitle').value.trim();
-    if(!title) return alert('กรุณาใส่ชื่องาน/ภารกิจ');
-    const taskData = {
-      title: title,
-      desc: document.getElementById('taskDesc').value,
-      location: document.getElementById('taskLocation').value,
-      room: document.getElementById('taskRoom').value,
-      startTime: document.getElementById('taskStartTime').value,
-      endTime: document.getElementById('taskEndTime').value,
-      type: document.getElementById('taskType').value,
-      updatedAt: Date.now()
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, onValue, set, push, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    import { getAuth, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcI8_7sVp2PB1MRlkOdbFn1ZzWu9i5_kE",
+      authDomain: "ops3-calendar.firebaseapp.com",
+      databaseURL: "https://ops3-calendar-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "ops3-calendar",
+      storageBucket: "ops3-calendar.firebasestorage.app",
+      messagingSenderId: "508970359654",
+      appId: "1:508970359654:web:555c65ecb85a1367bfda84"
     };
-
-    showStatus('<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึกขึ้น Firebase...', 'loading');
-    document.getElementById('saveBtn').disabled = true;
-
-    try {
-      if(editingTaskKey) {
-        await set(ref(db, `tasks/${selectedDate}/${editingTaskKey}`), taskData);
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    signInAnonymously(auth).catch(err => console.error('Auth failed:', err));
+    
+    let currentDate = new Date();
+    let tasks = {};
+    let editingTaskId = null;
+    
+    const monthNames = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const dayNames = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+    
+    function showStatus(msg, type='success'){
+      const bar = document.getElementById('statusBar');
+      bar.innerHTML = msg;
+      bar.className = 'status-bar ' + (type === 'error' ? 'error' : '');
+    }
+    
+    function renderCalendar(){
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      document.getElementById('monthYear').textContent = `${monthNames[month]} ${year + 543}`;
+      
+      const cal = document.getElementById('calendar');
+      cal.innerHTML = '';
+      
+      dayNames.forEach(d => {
+        const dn = document.createElement('div');
+        dn.className = 'day-name';
+        dn.textContent = d;
+        cal.appendChild(dn);
+      });
+      
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const prevDays = new Date(year, month, 0).getDate();
+      
+      for(let i = firstDay - 1; i >= 0; i--){
+        cal.appendChild(createDay(prevDays - i, true, month - 1, year));
+      }
+      
+      const today = new Date();
+      for(let d = 1; d <= daysInMonth; d++){
+        const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+        cal.appendChild(createDay(d, false, month, year, isToday));
+      }
+      
+      const total = firstDay + daysInMonth;
+      const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+      for(let d = 1; d <= remaining; d++){
+        cal.appendChild(createDay(d, true, month + 1, year));
+      }
+    }
+    
+    function createDay(day, isOther, month, year, isToday=false){
+      const div = document.createElement('div');
+      div.className = 'day' + (isOther ? ' other-month' : '') + (isToday ? ' today' : '');
+      
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      div.innerHTML = `<div class="day-number">${day}</div>`;
+      
+      if(tasks[dateStr]){
+        Object.entries(tasks[dateStr]).forEach(([id, task]) => {
+          const t = document.createElement('div');
+          t.className = `task ${task.type}`;
+          t.textContent = task.time ? `${task.time} ${task.title}` : task.title;
+          t.onclick = (e) => {e.stopPropagation(); editTask(dateStr, id, task);};
+          div.appendChild(t);
+          if(task.type === 'holiday') div.classList.add('holiday-day');
+        });
+      }
+      
+      div.onclick = () => openModal(dateStr);
+      return div;
+    }
+    
+    function openModal(date, id=null, task=null){
+      editingTaskId = id;
+      document.getElementById('taskDate').value = date;
+      document.getElementById('modalTitle').innerHTML = id ? '<i class="fa-solid fa-pen-to-square"></i> EDIT MISSION' : '<i class="fa-solid fa-rocket"></i> NEW MISSION';
+      document.getElementById('deleteBtn').style.display = id ? 'block' : 'none';
+      
+      if(task){
+        document.getElementById('taskTitle').value = task.title;
+        document.getElementById('taskTime').value = task.time || '';
+        document.getElementById('taskType').value = task.type;
+        document.getElementById('taskDetail').value = task.detail || '';
       } else {
-        await push(ref(db, `tasks/${selectedDate}`), taskData);
+        document.getElementById('taskForm').reset();
+        document.getElementById('taskDate').value = date;
       }
-      closeModal();
-      showStatus('<i class="fa-solid fa-bolt"></i> บันทึกสำเร็จ ทุกเครื่องเห็นพร้อมกัน', 'success');
-    } catch (err) {
-      showStatus('<i class="fa-solid fa-triangle-exclamation"></i> บันทึกไม่สำเร็จ', 'error');
-      console.error(err);
-    } finally {
-      document.getElementById('saveBtn').disabled = false;
+      
+      document.getElementById('taskModal').style.display = 'flex';
     }
-  }
-
-  window.deleteTask = async () => {
-    if(editingTaskKey && confirm('ยืนยันลบภารกิจนี้?')) {
-      showStatus('<i class="fa-solid fa-spinner fa-spin"></i> กำลังลบ...', 'loading');
+    
+    function editTask(date, id, task){
+      openModal(date, id, task);
+    }
+    
+    function closeModal(){
+      document.getElementById('taskModal').style.display = 'none';
+      editingTaskId = null;
+    }
+    
+    document.getElementById('taskForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const data = {
+        title: document.getElementById('taskTitle').value,
+        date: document.getElementById('taskDate').value,
+        time: document.getElementById('taskTime').value,
+        type: document.getElementById('taskType').value,
+        detail: document.getElementById('taskDetail').value
+      };
+      
       try {
-        await remove(ref(db, `tasks/${selectedDate}/${editingTaskKey}`));
+        if(editingTaskId){
+          await set(ref(db, `tasks/${data.date}/${editingTaskId}`), data);
+        } else {
+          await push(ref(db, `tasks/${data.date}`), data);
+        }
+        showStatus('<i class="fa-solid fa-circle-check"></i> MISSION LAUNCHED SUCCESSFULLY');
         closeModal();
-        showStatus('<i class="fa-solid fa-check"></i> ลบสำเร็จ', 'success');
-      } catch (err) {
-        showStatus('<i class="fa-solid fa-triangle-exclamation"></i> ลบไม่สำเร็จ', 'error');
+      } catch(err) {
+        showStatus(`<i class="fa-solid fa-triangle-exclamation"></i> LAUNCH FAILED: ${err.message}`, 'error');
       }
-    }
-  }
-
-  window.saveAsImage = () => {
-    html2canvas(document.getElementById('capture'), {scale: 2}).then(canvas => {
-      const link = document.createElement('a');
-      link.download = `OPS3_Calendar_${thaiMonths[currentDate.getMonth()]}_${currentDate.getFullYear()+543}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
+    };
+    
+    document.getElementById('deleteBtn').onclick = async () => {
+      if(confirm('Abort this mission?')){
+        const date = document.getElementById('taskDate').value;
+        await remove(ref(db, `tasks/${date}/${editingTaskId}`));
+        showStatus('<i class="fa-solid fa-trash"></i> MISSION ABORTED');
+        closeModal();
+      }
+    };
+    
+    document.getElementById('cancelBtn').onclick = closeModal;
+    document.getElementById('addBtn').onclick = () => {
+      const today = new Date().toISOString().split('T')[0];
+      openModal(today);
+    };
+    
+    document.getElementById('prevBtn').onclick = () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    };
+    
+    document.getElementById('nextBtn').onclick = () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    };
+    
+    onValue(ref(db, 'tasks'), (snap) => {
+      tasks = snap.val() || {};
+      renderCalendar();
+      showStatus('<i class="fa-solid fa-satellite-dish"></i> CONNECTED TO MISSION CONTROL - REAL-TIME SYNC ACTIVE');
+    }, (err) => {
+      showStatus(`<i class="fa-solid fa-triangle-exclamation"></i> CONNECTION LOST: ${err.message}`, 'error');
     });
-  }
-</script>
+    
+    renderCalendar();
+  </script>
 </body>
 </html>
