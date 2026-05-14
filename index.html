@@ -222,6 +222,39 @@
       animation:twinkle 5s ease-in-out infinite alternate;
     }
     @keyframes twinkle{0%{opacity:0.3}100%{opacity:0.6}}
+    /* ===== MOBILE FIX v7.6 ===== */
+@media (max-width: 768px) {
+  .container { border-radius: 16px; margin: 10px; }
+  .header { padding: 20px 16px; }
+  .header-text h1 { font-size: 24px; }
+  .header-text h2 { font-size: 16px; }
+  
+  .calendar-wrapper { padding: 10px; }
+  .calendar { gap: 4px; padding: 4px; }
+  .day { min-height: 75px; padding: 4px; border-radius: 8px; }
+  .day-name { padding: 8px 2px; font-size: 11px; }
+  .day-name:nth-child(5)::after { content: "พฤหัส"; } 
+  .day-name:nth-child(5) { font-size: 0; }
+  .day-name:nth-child(5)::after { font-size: 11px; }
+  .day-number { font-size: 14px; top: 4px; right: 6px; }
+  .event { font-size: 9px; padding: 2px 4px; }
+  
+  .controls { padding: 12px; flex-direction: column; gap: 10px; }
+  .controls-left { width: 100%; justify-content: space-between; }
+  .controls-right { width: 100%; justify-content: center; }
+  
+  .add-btn { 
+    bottom: 80px; 
+    right: 16px; 
+    width: 56px; 
+    height: 56px; 
+    z-index: 999;
+  }
+  
+  .modal-content { width: 95%; padding: 20px; margin: 10px; }
+  .legend { flex-wrap: wrap; gap: 8px; font-size: 11px; }
+}
+/* ===== จบ MOBILE FIX ===== */
     .container{
       max-width:1440px;margin:0 auto;background:var(--glass);backdrop-filter:blur(25px);
       border-radius:32px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.6);
