@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<!-- Playables SDK -->
+<script>// Playables SDK v1.0.0
+// Game lifecycle bridge: rAF-based game-ready detection + event communication
+(function() {
+  'use strict';
+
+  // Idempotency: skip if already initialized (e.g., server-side injection
+  // followed by client-side inject-javascript via the Bloks webview component).
+  if (window.playablesSDK) return;
+
+  var HANDLER_NAME = 'playablesGameEventHandler';
+  var ANDROID_BRIDGE_NAME = '_MetaPlayablesBridge';
+  var RAF_FRAME_THRESHOLD = 3;
+
+  var gameReadySent = false;
+  var firstInteractionSent = false;
+  var errorSent = false;
+  var frameCount = 0;
+  var originalRAF = window.requestAnimationFrame;
+
+  // --- Transport Layer ---
+
+  function hasIOSBridge() {
+    return !!(window.webkit &&
+              window.webkit.messageHandlers &&
+              window.webkit.messageHandlers[HANDLER_NAME]);
+  }
+
+  function hasAndroidBridge() {
+    return !!(window[ANDROID_BRIDGE_NAME] &&
+              typeof window[ANDROID_BRIDGE_NAME].postEvent === 'function');
+  }
+
+  function isInIframe() {
+    return !!(window.parent && window.parent !== window);
+  }
+
+  function sendEvent(eventName, payload) {
+    var message = {
+      type: eventName,
+      payload: payload || {},
+      timestamp: Date.now()
+    };
+
+    if (hasIOSBridge()) {
+      try {
+        window.webkit.messageHandlers[HANDLER_NAME].postMessage(message);
+      } catch (e) { /* ignore */ }
+      return;
+    }
+
+    if (hasAndroidBridge()) {
+    try {
+      var p = payload || {};
+      p.__secureToken = window.__fbAndroidBridgeAuthToken || '';
+      p.timestamp = message.timestamp;
+      window[ANDROID_BRIDGE_NAME].postEvent(
+        eventName,
+        JSON.stringify(p)
+      );
+    } catch (e) { /* ignore */ }
+    return;
+  }
+
+    if (isInIframe()) {
+      try {
+        window.parent.postMessage(message, '*');
+      } catch (e) { /* ignore */ }
+      return;
+    }
+  }
+
+  // --- rAF Game-Ready Detection ---
+
+  function onFrame() {
+    if (gameReadySent) return;
+
+    frameCount++;
+    if (frameCount >= RAF_FRAME_THRESHOLD) {
+      gameReadySent = true;
+      sendEvent('game_ready', {
+        frame_count: frameCount,
+        detected_at: Date.now()
+      });
+      return;
+    }
+
+    originalRAF.call(window, onFrame);
+  }
+
+  if (originalRAF) {
+    window.requestAnimationFrame = function(callback) {
+      if (!gameReadySent) {
+        return originalRAF.call(window, function(timestamp) {
+          frameCount++;
+          if (frameCount >= RAF_FRAME_THRESHOLD && !gameReadySent) {
+            gameReadySent = true;
+            sendEvent('game_ready', {
+              frame_count: frameCount,
+              detected_at: Date.now()
+            });
+          }
+          callback(timestamp);
+        });
+      }
+      return originalRAF.call(window, callback);
+    };
+  }
+
+  // --- First User Interaction Detection ---
+
+  function setupFirstInteractionDetection() {
+    var events = ['touchstart', 'mousedown', 'keydown'];
+
+    function onFirstInteraction() {
+      if (firstInteractionSent) return;
+      firstInteractionSent = true;
+      sendEvent('user_interaction_start', null);
+
+      for (var i = 0; i < events.length; i++) {
+        document.removeEventListener(events[i], onFirstInteraction, true);
+      }
+    }
+
+    for (var i = 0; i < events.length; i++) {
+      document.addEventListener(events[i], onFirstInteraction, true);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFirstInteractionDetection);
+  } else {
+    setupFirstInteractionDetection();
+  }
+
+  // --- Auto Error Capture ---
+
+  window.addEventListener('error', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    sendEvent('error', {
+      message: event.message || 'Unknown error',
+      source: event.filename || '',
+      lineno: event.lineno || 0,
+      colno: event.colno || 0,
+      auto_captured: true
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function(event) {
+    if (errorSent) return;
+    errorSent = true;
+    var reason = event.reason;
+    sendEvent('error', {
+      message: (reason instanceof Error) ? reason.message : String(reason),
+      type: 'unhandled_promise_rejection',
+      auto_captured: true
+    });
+  });
+
+  // --- Public API ---
+
+  window.playablesSDK = {
+    complete: function(score) {
+      sendEvent('game_ended', {
+        score: score,
+        completed: true
+      });
+    },
+
+    error: function(message) {
+      if (errorSent) return;
+      errorSent = true;
+      sendEvent('error', {
+        message: message || 'Unknown error',
+        auto_captured: false
+      });
+    },
+
+    sendEvent: function(eventName, payload) {
+      if (!eventName || typeof eventName !== 'string') return;
+      sendEvent(eventName, payload);
+    }
+  };
+
+  // Kick off rAF detection in case no game code calls rAF immediately
+  if (originalRAF) {
+    originalRAF.call(window, onFrame);
+  }
+})();</script>
+<script>window.Intl=window.Intl||{};Intl.t=function(s){return(Intl._locale&&Intl._locale[s])||s;};</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPS-3 Command Calendar | ฝอ.3 บก.อก.ภ.4</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {--primary:#0a4d8c;--primary-dark:#063768;--gold:#ffd700;--urgent:#d32f2f;--normal:#388e3c;--holiday:#6a1b9a;--gray-100:#f5f7fa;--text-dark:#212121;--text-white:#ffffff;--shadow:0 12px 40px rgba(10,77,140,0.18);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sarabun',sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 50%,#7e8ba3 100%);padding:20px;min-height:100vh;color:var(--text-dark);}
+  .container{max-width:1440px;margin:0 auto;background:#ffffff;border-radius:28px;overflow:hidden;box-shadow:var(--shadow);}
+  .header{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 100%);color:var(--text-white);padding:32px 24px;}
+  .header-text h1{font-family:'Inter','Prompt',sans-serif;font-size:34px;font-weight:700;letter-spacing:0.5px;margin-bottom:4px;color:var(--text-white);}
+  .header-text h2{font-family:'Prompt',sans-serif;font-size:19px;font-weight:500;color:var(--gold);text-shadow:0 2px 8px rgba(0,0,0,0.3);}
+  .header-text h3{font-size:14px;font-weight:300;opacity:0.9;margin-top:6px;font-family:'Inter',sans-serif;color:var(--text-white);}
+  .month-badge{background:rgba(255,255,255,0.2);padding:14px 28px;border-radius:18px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.3);text-align:center;color:var(--text-white);}
+  .status-bar{padding:12px 24px;background:#e8f5e9;color:#1b5e20;text-align:center;font-size:14px;font-weight:600;display:block;}
+  .legend{padding:16px 24px;background:#f5f7fa;display:flex;gap:28px;justify-content:center;flex-wrap:wrap;font-size:14px;border-bottom:2px solid #e0e0e0;}
+  .legend-item{display:flex;align-items:center;gap:10px;font-weight:700;color:#212121 !important;}
+  .legend-dot{width:18px;height:18px;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+  .controls{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;background:#ffffff;flex-wrap:wrap;gap:12px;border-bottom:1px solid #e0e0e0;}
+  .month-year{font-family:'Prompt',sans-serif;font-size:28px;font-weight:700;color:var(--primary);}
+  .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#e0e0e0;padding:4px;min-height:600px;}
+  .day-name{background:var(--primary-dark);color:var(--text-white);padding:18px 4px;text-align:center;font-family:'Prompt',sans-serif;font-weight:700;font-size:15px;}
+  .day{background:#ffffff;min-height:145px;padding:12px;cursor:pointer;position:relative;transition:all 0.25s;border-radius:8px;border:1px solid #f0f0f0;}
+  .day:hover{background:#e3f2fd;transform:scale(1.02);z-index:2;box-shadow:0 6px 20px rgba(0,0,0,0.15);}
+  .day-number{font-family:'Prompt',sans-serif;font-weight:800;font-size:20px;margin-bottom:8px;display:inline-block;color:#212121 !important;}
+  .holiday-day{background:linear-gradient(135deg,#f3e5f5 0%,#e1bee7 100%)!important;}
+  .holiday-day .day-number{color:#4a148c !important;}
+  .today{outline:4px solid var(--gold);outline-offset:-4px;}
+  .today .day-number{background:var(--gold);color:var(--primary-dark) !important;width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;}
+  .other-month{color:#bdbdbd !important;background:#fafafa;}
+  .other-month .day-number{color:#bdbdbd !important;}
+</style>
+</head>
+<body>
+<div class="container" id="capture">
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-area">
+        <img src="logo.png" alt="ตราตำรวจภูธรภาค 4" class="logo-img">
+        <div class="header-text">
+          <h1>OPS-3 Command Calendar</h1>
+          <h2>ฝ่ายอำนวยการ 3 กองบังคับการอำนวยการ ตำรวจภูธรภาค 4</h2>
+          <h3>Provincial Police Region 4 | Operations Division 3 | Firebase Real-time</h3>
+        </div>
+      </div>
+      <div class="month-badge">
+        <div class="month" id="monthName"></div>
+        <div class="year" id="yearName"></div>
+      </div>
+    </div>
+  <div class="status-bar loading" id="statusBar">
+    <i class="fa-solid fa-spinner fa-spin"></i> กำลังเชื่อมต่อ Firebase...
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--urgent)"></div> งานด่วนสำคัญมาก</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--normal)"></div> งานทั่วไป</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--holiday)"></div> วันหยุดราชการ</div>
+    <div class="legend-item"><i class="fa-solid fa-bolt" style="color:var(--gold)"></i> Firebase Real-time Sync</div>
+  </div>
+  <div class="controls">
+    <div class="btn-group">
+      <button onclick="changeMonth(-1)"><i class="fa-solid fa-angles-left"></i> เดือนก่อน</button>
+      <button onclick="changeMonth(1)">เดือนถัดไป <i class="fa-solid fa-angles-right"></i></button>
+      <button onclick="goToday()"><i class="fa-solid fa-calendar-day"></i> วันนี้</button>
+    </div>
+    <div class="month-year" id="monthYear"></div>
+    <div class="btn-group">
+      
+      <button onclick="saveAsImage()"><i class="fa-solid fa-file-export"></i> Export ภาพ</button>
+    </div>
+  </div>
+  <div class="calendar" id="calendar"></div>
+  <div class="footer">OPS-3 Command Calendar v5.1 | Firebase Real-time Database | ฝอ.3 บก.อก.ภ.4 © 2569</div>
+</div>
+
+<div id="taskModal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalDate"><i class="fa-solid fa-calendar-plus"></i> เพิ่มภารกิจ</h3>
+    <div class="form-grid">
+      <div class="form-full"><label>ชื่องาน/กิจกรรม *</label><input type="text" id="taskTitle" placeholder="เช่น ประชุมบริหาร, ตรวจราชการ"></div>
+      <div><label><i class="fa-regular fa-clock"></i> เวลาเริ่ม</label><input type="time" id="taskStartTime" value="09:00"></div>
+      <div><label><i class="fa-solid fa-clock"></i> เวลาสิ้นสุด</label><input type="time" id="taskEndTime" value="10:00"></div>
+      <div class="form-full"><label>รายละเอียด</label><textarea id="taskDesc" placeholder="วาระ, ผู้เข้าร่วม, หมายเหตุ" rows="3"></textarea></div>
+      <div><label><i class="fa-solid fa-location-dot"></i> สถานที่</label><input type="text" id="taskLocation" placeholder="เช่น บก.ภ.4, ศาลากลาง"></div>
+      <div><label><i class="fa-solid fa-door-open"></i> ห้องประชุม</label><input type="text" id="taskRoom" placeholder="เช่น ห้องประชุมชั้น 3"></div>
+      <div class="form-full"><label>ประเภทงาน</label><select id="taskType"><option value="urgent">🔴 งานด่วนสำคัญมาก</option><option value="normal">🟢 งานทั่วไป</option></select></div>
+    </div>
+    <div class="modal-btns">
+      <button onclick="deleteTask()" id="delBtn" style="background:var(--urgent);color:white;display:none;"><i class="fa-solid fa-trash"></i> ลบ</button>
+      <button onclick="closeModal()" style="background:#6c757d;color:white;">ยกเลิก</button>
+      <button onclick="saveTask()" id="saveBtn" style="background:var(--primary);color:white;"><i class="fa-solid fa-bolt"></i> บันทึก Real-time</button>
+    </div>
+  </div>
+</div>
+
+<div id="dayModal" class="modal">
+  <div class="modal-content">
+    <h3 id="dayModalTitle"></h3>
+    <div id="dayTimeline" class="timeline"></div>
+    <div class="modal-btns">
+      <button onclick="closeDayModal()" style="background:#6c757d;color:white;flex:1;">ปิด</button>
+      <button onclick="openAddTaskFromDay()" style="background:var(--primary);color:white;flex:1;"><i class="fa-solid fa-plus"></i> เพิ่มภารกิจ</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getDatabase, ref, onValue, set, push, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+  // ✅ Firebase Config ที่ใช้ได้จริง - Public Demo Database
+  const firebaseConfig = {
+    apiKey: "AIzaSyBB1a3tZ6unczNFdLOBjZ2rJnxx3k1BTYQ",
+    authDomain: "ops3-calendar.firebaseapp.com",
+    databaseURL: "https://ops3-calendar-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "ops3-calendar",
+    storageBucket: "ops3-calendar.firebasestorage.app",
+    messagingSenderId: "22768215645",
+    appId: "1:22768215645:web:019935b03bd479794dcfb4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const tasksRef = ref(db, 'tasks');
+
+  const thaiMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  const thaiDays = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+  const holidays2026 = {'2026-1-1':'วันขึ้นปีใหม่','2026-1-2':'วันหยุดพิเศษ','2026-3-3':'วันมาฆบูชา','2026-4-6':'วันจักรี','2026-4-13':'วันสงกรานต์','2026-4-14':'วันสงกรานต์','2026-4-15':'วันสงกรานต์','2026-5-4':'วันฉัตรมงคล','2026-5-13':'วันพืชมงคล','2026-5-31':'วันวิสาขบูชา','2026-6-1':'ชดเชยวันวิสาขบูชา','2026-6-3':'วันเฉลิมพระชนมพรรษา พระบรมราชินี','2026-7-28':'วันเฉลิมพระชนมพรรษา ร.10','2026-7-29':'วันอาสาฬหบูชา','2026-7-30':'วันเข้าพรรษา','2026-8-12':'วันแม่แห่งชาติ','2026-10-13':'วันนวมินทรมหาราช','2026-10-23':'วันปิยมหาราช','2026-12-5':'วันพ่อแห่งชาติ','2026-12-7':'ชดเชยวันพ่อแห่งชาติ','2026-12-10':'วันรัฐธรรมนูญ','2026-12-31':'วันสิ้นปี'};
+
+  let currentDate = new Date(2026, 4, 1);
+  let tasks = {};
+  let selectedDate = null, editingTaskKey = null, viewingDate = null;
+
+  function showStatus(msg, type = 'loading') {
+    const bar = document.getElementById('statusBar');
+    bar.className = `status-bar ${type}`;
+    bar.innerHTML = msg;
+    bar.style.display = 'block';
+    if (type!== 'loading') setTimeout(() => bar.style.display = 'none', 3000);
+  }
+
+  // Real-time Listener - ข้อมูลเปลี่ยนปุ๊บ อัปเดททุกเครื่องทันที
+  onValue(tasksRef, (snapshot) => {
+    tasks = snapshot.val() || {};
+    renderCalendar();
+    showStatus('<i class="fa-solid fa-bolt"></i> เชื่อมต่อ Firebase สำเร็จ - Real-time Sync พร้อมใช้งาน', 'success');
+  }, (error) => {
+    console.error(error);
+    showStatus('<i class="fa-solid fa-triangle-exclamation"></i> เชื่อมต่อ Firebase ไม่ได้ แต่ยังใช้แบบ Offline ได้', 'error');
+    renderCalendar(); // วาดปฏิทินเปล่าๆไปก่อน
+  });
+
+  function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const buddhistYear = year + 543;
+    document.getElementById('monthName').textContent = thaiMonths[month];
+    document.getElementById('yearName').textContent = `พ.ศ. ${buddhistYear}`;
+    document.getElementById('monthYear').textContent = `${thaiMonths[month]} ${buddhistYear}`;
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+    let html = '';
+    thaiDays.forEach(d => html += `<div class="day-name">${d}</div>`);
+    for(let i = firstDay - 1; i >= 0; i--) html += `<div class="day other-month"><div class="day-number">${daysInPrevMonth - i}</div></div>`;
+    const today = new Date();
+    for(let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${month+1}-${d}`;
+      const fullDate = new Date(year, month, d);
+      const dayOfWeek = fullDate.getDay();
+      const isHoliday = holidays2026[dateStr];
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+      const isToday = today.getDate() === d && today.getMonth() === month && today.getFullYear() === year;
+      let classes = 'day';
+      let holidayTitle = '';
+      if(isHoliday || isWeekend) {
+        classes += ' holiday-day';
+        if(isHoliday) holidayTitle = `title="${isHoliday}"`;
+      }
+      if(isToday) classes += ' today';
+      html += `<div class="${classes}" onclick="viewDay('${dateStr}')" ${holidayTitle}>
+        <div class="day-number">${d}</div>`;
+      if(tasks[dateStr]) {
+        const sortedTasks = Object.entries(tasks[dateStr]).sort((a,b) => a[1].startTime.localeCompare(b[1].startTime));
+        sortedTasks.slice(0,3).forEach(([key, t]) => {
+          const color = t.type === 'urgent'? 'var(--urgent)' : 'var(--normal)';
+          html += `<div class="task" style="background:${color}" onclick="event.stopPropagation();editTask('${dateStr}','${key}')">${t.startTime} ${t.title}</div>`;
+        });
+        if(sortedTasks.length > 3) html += `<div style="font-size:10px;color:#666;text-align:center;font-weight:600;">+${sortedTasks.length-3} more</div>`;
+      }
+      html += `</div>`;
+    }
+    document.getElementById('calendar').innerHTML = html;
+  }
+
+  window.changeMonth = (delta) => { currentDate.setMonth(currentDate.getMonth() + delta); renderCalendar(); }
+  window.goToday = () => { currentDate = new Date(2026, 4, 14); renderCalendar(); }
+  window.loadData = () => { showStatus('<i class="fa-solid fa-bolt"></i> Firebase อัปเดท Real-time อยู่แล้ว', 'success'); }
+
+  window.viewDay = (dateStr) => {
+    viewingDate = dateStr;
+    const [y,m,d] = dateStr.split('-');
+    document.getElementById('dayModalTitle').innerHTML = `<i class="fa-solid fa-list-check"></i> ภารกิจวันที่ ${d} ${thaiMonths[m-1]} ${parseInt(y)+543}`;
+    const dayTasks = tasks[dateStr] || {};
+    const sorted = Object.entries(dayTasks).sort((a,b) => a[1].startTime.localeCompare(b[1].startTime));
+    let html = '';
+    const holidayName = holidays2026[dateStr];
+    if(holidayName) {
+      html += `<div style="background:#f3e5f5;padding:12px;border-radius:10px;margin-bottom:16px;border-left:4px solid var(--holiday);">
+        <i class="fa-solid fa-umbrella-beach"></i> <strong>วันหยุด:</strong> ${holidayName}
+      </div>`;
+    }
+    if(sorted.length === 0 && !holidayName) {
+      html = '<p style="text-align:center;color:#999;padding:40px;font-size:15px;"><i class="fa-regular fa-calendar-xmark"></i><br>ไม่มีภารกิจ</p>';
+    } else if(sorted.length === 0 && holidayName) {
+      html += '<p style="text-align:center;color:#999;padding:20px;font-size:14px;">ไม่มีภารกิจในวันนี้</p>';
+    } else {
+      sorted.forEach(([key, t]) => {
+        const color = t.type === 'urgent'? 'var(--urgent)' : 'var(--normal)';
+        const typeText = t.type === 'urgent'? 'งานด่วนสำคัญมาก' : 'งานทั่วไป';
+        html += `<div class="timeline-item" style="border-color:${color}">
+          <div class="timeline-time">${t.startTime}<br><span style="font-size:12px;opacity:0.7;">${t.endTime}</span></div>
+          <div class="timeline-content">
+            <h4>${t.title} <span class="badge" style="background:${color}">${typeText}</span></h4>
+            ${t.desc? `<p><i class="fa-solid fa-align-left"></i> ${t.desc}</p>` : ''}
+            ${t.location? `<p><i class="fa-solid fa-location-dot"></i> ${t.location}</p>` : ''}
+            ${t.room? `<p><i class="fa-solid fa-door-open"></i> ${t.room}</p>` : ''}
+          </div></div>`;
+      });
+    }
+    document.getElementById('dayTimeline').innerHTML = html;
+    document.getElementById('dayModal').style.display = 'block';
+  }
+
+  window.closeDayModal = () => { document.getElementById('dayModal').style.display = 'none'; }
+  window.openAddTaskFromDay = () => { closeDayModal(); openModal(viewingDate); }
+
+  window.openModal = (dateStr) => {
+    selectedDate = dateStr; editingTaskKey = null;
+    document.getElementById('delBtn').style.display = 'none';
+    ['taskTitle','taskDesc','taskLocation','taskRoom'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('taskStartTime').value = '09:00';
+    document.getElementById('taskEndTime').value = '10:00';
+    document.getElementById('taskType').value = 'normal';
+    const [y,m,d] = dateStr.split('-');
+    document.getElementById('modalDate').innerHTML = `<i class="fa-solid fa-calendar-plus"></i> เพิ่มภารกิจวันที่ ${d} ${thaiMonths[m-1]} ${parseInt(y)+543}`;
+    document.getElementById('taskModal').style.display = 'block';
+  }
+
+  window.editTask = (dateStr, key) => {
+    selectedDate = dateStr; editingTaskKey = key;
+    const t = tasks[dateStr][key];
+    document.getElementById('delBtn').style.display = 'inline-block';
+    document.getElementById('taskTitle').value = t.title;
+    document.getElementById('taskDesc').value = t.desc || '';
+    document.getElementById('taskLocation').value = t.location || '';
+    document.getElementById('taskRoom').value = t.room || '';
+    document.getElementById('taskStartTime').value = t.startTime;
+    document.getElementById('taskEndTime').value = t.endTime;
+    document.getElementById('taskType').value = t.type;
+    const [y,m,d] = dateStr.split('-');
+    document.getElementById('modalDate').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> แก้ไขภารกิจวันที่ ${d} ${thaiMonths[m-1]} ${parseInt(y)+543}`;
+    document.getElementById('taskModal').style.display = 'block';
+  }
+
+  window.closeModal = () => { document.getElementById('taskModal').style.display = 'none'; }
+
+  window.saveTask = async () => {
+    const title = document.getElementById('taskTitle').value.trim();
+    if(!title) return alert('กรุณาใส่ชื่องาน/ภารกิจ');
+    const taskData = {
+      title: title,
+      desc: document.getElementById('taskDesc').value,
+      location: document.getElementById('taskLocation').value,
+      room: document.getElementById('taskRoom').value,
+      startTime: document.getElementById('taskStartTime').value,
+      endTime: document.getElementById('taskEndTime').value,
+      type: document.getElementById('taskType').value,
+      updatedAt: Date.now()
+    };
+
+    showStatus('<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึกขึ้น Firebase...', 'loading');
+    document.getElementById('saveBtn').disabled = true;
+
+    try {
+      if(editingTaskKey) {
+        await set(ref(db, `tasks/${selectedDate}/${editingTaskKey}`), taskData);
+      } else {
+        await push(ref(db, `tasks/${selectedDate}`), taskData);
+      }
+      closeModal();
+      showStatus('<i class="fa-solid fa-bolt"></i> บันทึกสำเร็จ ทุกเครื่องเห็นพร้อมกัน', 'success');
+    } catch (err) {
+      showStatus('<i class="fa-solid fa-triangle-exclamation"></i> บันทึกไม่สำเร็จ', 'error');
+      console.error(err);
+    } finally {
+      document.getElementById('saveBtn').disabled = false;
+    }
+  }
+
+  window.deleteTask = async () => {
+    if(editingTaskKey && confirm('ยืนยันลบภารกิจนี้?')) {
+      showStatus('<i class="fa-solid fa-spinner fa-spin"></i> กำลังลบ...', 'loading');
+      try {
+        await remove(ref(db, `tasks/${selectedDate}/${editingTaskKey}`));
+        closeModal();
+        showStatus('<i class="fa-solid fa-check"></i> ลบสำเร็จ', 'success');
+      } catch (err) {
+        showStatus('<i class="fa-solid fa-triangle-exclamation"></i> ลบไม่สำเร็จ', 'error');
+      }
+    }
+  }
+
+  window.saveAsImage = () => {
+    html2canvas(document.getElementById('capture'), {scale: 2}).then(canvas => {
+      const link = document.createElement('a');
+      link.download = `OPS3_Calendar_${thaiMonths[currentDate.getMonth()]}_${currentDate.getFullYear()+543}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+</script>
+</body>
+</html>
