@@ -224,46 +224,48 @@
     @keyframes twinkle{0%{opacity:0.3}100%{opacity:0.6}}
     /* ===== MOBILE FIX v7.6 ===== */
 @media (max-width: 768px) {
-  .container { border-radius: 16px; margin: 10px; }
-  .header { padding: 20px 16px; }
-  .header-text h1 { font-size: 24px; }
-  .header-text h2 { font-size: 16px; }
+  body { padding: 5px; }
+  .container { border-radius: 12px; margin: 5px; }
+  .header { padding: 16px 12px; }
+  .header-text h1 { font-size: 20px; }
+  .header-text h2 { font-size: 14px; }
   
-  .calendar-wrapper { padding: 10px; }
-  .calendar { gap: 4px; padding: 4px; }
-  .day { min-height: 75px; padding: 4px; border-radius: 8px; }
-  .day-name { padding: 8px 2px; font-size: 11px; }
-  .day-name:nth-child(5)::after { content: "พฤหัส"; } 
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    padding: 2px;
+  }
+  
+  .day-name {
+    padding: 6px 0;
+    font-size: 10px;
+    letter-spacing: -0.5px;
+  }
   .day-name:nth-child(5) { font-size: 0; }
-  .day-name:nth-child(5)::after { font-size: 11px; }
-  .day-number { font-size: 14px; top: 4px; right: 6px; }
-  .event { font-size: 9px; padding: 2px 4px; }
+  .day-name:nth-child(5)::after { 
+    content: "พฤหัส"; 
+    font-size: 10px; 
+  }
   
-  .controls { padding: 12px; flex-direction: column; gap: 10px; }
-  .controls-left { width: 100%; justify-content: space-between; }
-  .controls-right { width: 100%; justify-content: center; }
+  .day { min-height: 65px; padding: 2px; border-radius: 6px; }
+  .day-number { font-size: 13px; top: 2px; right: 4px; }
+  .event { font-size: 8px; padding: 1px 2px; margin-top: 18px; }
+  
+  .controls { padding: 8px; flex-direction: column; gap: 8px; }
+  .controls-left, .controls-right { width: 100%; }
   
   .add-btn { 
-    bottom: 80px; 
-    right: 16px; 
-    width: 56px; 
-    height: 56px; 
+    bottom: 120px; 
+    right: 12px; 
+    width: 50px; 
+    height: 50px;
     z-index: 999;
   }
   
-  .modal-content { width: 95%; padding: 20px; margin: 10px; }
-  .legend { flex-wrap: wrap; gap: 8px; font-size: 11px; }
+  .modal-content { width: 92%; padding: 16px; margin: 5px; }
+  .legend { flex-wrap: wrap; gap: 6px; font-size: 10px; }
 }
-/* ===== จบ MOBILE FIX ===== */
-    .container{
-      max-width:1440px;margin:0 auto;background:var(--glass);backdrop-filter:blur(25px);
-      border-radius:32px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.6);
-      border:1px solid var(--glass-border);position:relative;z-index:1;
-    }
-    .header{
-      background:linear-gradient(135deg,rgba(11,61,145,0.8) 0%,rgba(252,61,33,0.4) 100%);
-      color:#fff;padding:40px 24px;border-bottom:1px solid var(--glass-border);position:relative;
-    }
     .header::after{
       content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
       background:linear-gradient(90deg,transparent,#FC3D21,transparent);
